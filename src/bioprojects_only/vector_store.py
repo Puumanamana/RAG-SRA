@@ -12,7 +12,7 @@ from llama_index.vector_stores.chroma import ChromaVectorStore
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
 
-def initialize_vector_store(outdir="./rag_data"):
+def initialize_vector_store(outdir="./bioprojects-rag-data"):
     """Initialize a vector store index with no documents."""
     # --- Build or load vector store index
     vector_store_path = Path(outdir, "chroma_db")
@@ -48,9 +48,6 @@ def build_new_index(documents_json, storage_context):
                 }
             )
             documents.append(doc)
-
-            if len(documents) > 100:
-                break
     
     print(f"Building vector store index on ({len(documents):,} documents)...")
     return VectorStoreIndex.from_documents(
@@ -60,7 +57,7 @@ def build_new_index(documents_json, storage_context):
         )
 
 
-def get_vector_store_index(outdir):
+def get_vector_store_index(outdir="bioprojects-rag-data"):
     (vector_store, storage_context) = initialize_vector_store(outdir)
     return VectorStoreIndex.from_vector_store(
         vector_store, 
@@ -69,8 +66,8 @@ def get_vector_store_index(outdir):
 
 
 if __name__ == "__main__":
-    input = "./rag-data/bioprojects.json"
-    outdir = "./rag-data"
+    input = "./bioprojects-rag-data/bioprojects.json"
+    outdir = "./bioprojects-rag-data"
 
     if Path(outdir, "chroma_db").exists():
         print("Skipping, vector store already exists.")

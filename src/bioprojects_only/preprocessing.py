@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
 
-def download_bioprojects(output="./rag-data/bioproject.xml"):
+def download_bioprojects(output="./bioprojects-rag-data/bioproject.xml"):
     """Download the Bioproject XML data from NCBI."""
     output = Path(output)
 

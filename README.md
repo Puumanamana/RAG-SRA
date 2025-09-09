@@ -2,15 +2,7 @@
 
 ## Summary
 
-Current study counts in SRA_Accessions.tab, as of Sep 2 2025: 713,567
-- SRP IDs: 615,730
-- ERP IDs: 77,351
-- DRP IDs: 20,486
-
-SRA_Accessions.tab: (type='RUN'):
-- 1,824,558 accession total
-- 1,023,045 SRP accessions
-NCBI_SRA_Metadata_Full_20250818: 7,036,375 studies, 566,321 study files 
+NCBI_SRA_Metadata_Full_20250818: 7,036,375 studies, ~500k study files 
 NCBI_SRA_Metadata_20250901: 10,596 studies, ~2k study files
 
 ## Data
@@ -21,12 +13,13 @@ NCBI_SRA_Metadata_20250901: 10,596 studies, ~2k study files
 | sample.xml      | SAMPLE_SET     | SRS/BioSample  |      BioProject     | Defines the biological samples collected for the study               |
 | experiment.xml  | EXPERIMENT_SET |     SRX        | SRS/SRP/BioProject  | Defines how a given sample was processed/prepared for sequencing     |
 | run.xml         | RUN_SET        |     SRR        |    EXPERIMENT       | Defines the actual sequencing data runs produced                     |
+| analysis.xml    | ignored        |     ignored    |    ignored          | Ignored                                                              |
 
-**Fields to keep**
+**Useful fields for data extraction**
 
 - STUDY_SET: STUDY/DESCRIPTOR
 - SAMPLE_SET: TITLE, SAMPLE_NAME, DESCRIPTION, SAMPLE_ATTRIBUTES
-- EXPERIMENT_SET: TITLE, DESIGN/DESIGN_DESCR, DESIGN//LIBRARY_DESCRIPTOR/{LIBRARY_NAME,LIBRARY_STRATEGY,LIBRARY_SOURCE,LIBRARY_SELECTION,LIBRARY_LAYOUT}, PLATFORM/TECHNOLOGY_FLAG/INSTRUMENT_MODEL
+- EXPERIMENT_SET: TITLE, DESIGN/DESIGN_DESCR, DESIGN/LIBRARY_DESCRIPTOR/{LIBRARY_NAME,LIBRARY_STRATEGY,LIBRARY_SOURCE,LIBRARY_SELECTION,LIBRARY_LAYOUT}, PLATFORM/TECHNOLOGY_FLAG/INSTRUMENT_MODEL
 - RUN_SET: RUN_ATTRIBUTES
 
 ## Approach
@@ -34,12 +27,12 @@ NCBI_SRA_Metadata_20250901: 10,596 studies, ~2k study files
 (1) Data extraction
 - We collect latest study metadata by downloading the latest SRA metadata dump: https://ftp-trace.ncbi.nlm.nih.gov/sra/reports/Metadata/NCBI_SRA_Metadata_DATE.tar.gz
 - We preprocess each file and collect relevant fields
-- We convert to JSON
-- We store in different folders study, sample, experiment and run info (might want to also try combining the last 3)
+- We "deduplicate" sample/experiment level data, and only show unique values with their frequencies
+- We write in a JSON file all of the study metadata (focus on study, sample & experiment, little info in run.xml)
 
 (2) Feature extraction & vector database (Llama Index)
+- Embedding: GoogleGenAIEmbedding(), or HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5") if we hit rate limits
+- Vector database: ChromaDB for convenience (+open source)
 
 (3) RAG system
-- Which LLM model?
-
-(4) Chatbot app (LangChain)
+- GoogleGenAI("models/gemini-2.0-flash-lite"), for simplicity

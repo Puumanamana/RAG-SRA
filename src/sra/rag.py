@@ -13,16 +13,17 @@ from vector_store import get_vector_store_index
 class Study(BaseModel):
     bioproject: str = Field(description="BioProject accession")
     title: str = Field(description="Shortened title of the study")
+    explanation: str = Field(description="Explanation of why this study was retrieved")
 
 class StudyList(BaseModel):
     studies: list[Study] = Field(description="List of studies")
 
     def __str__(self):
-        msg = [f"> {s.bioproject:<14}: {s.title}" for s in self.studies]
+        msg = [f"> {s.bioproject:<14}\nReason: {s.explanation}\nTitle: {s.title}" for s in self.studies]
         return f"#Hits: {len(msg)}\n" + "\n".join(msg)
     
 
-def build_query_engine(k=30, similiarity_cutoff=0.5, outdir="./rag-data", model="models/gemini-2.0-flash-lite"):
+def build_query_engine(k=30, similiarity_cutoff=0.4, outdir="./bioprojects-rag-data", model="models/gemini-2.0-flash-lite"):
     # -- Retriever
     index = get_vector_store_index(outdir)
     retriever = VectorIndexRetriever(index=index, similarity_top_k=k)
@@ -43,8 +44,8 @@ def build_query_engine(k=30, similiarity_cutoff=0.5, outdir="./rag-data", model=
 
 if __name__ == "__main__":
 
-    query_engine = build_query_engine(outdir="./bioprojects")
-    question = "What are the microbiome studies?"
+    query_engine = build_query_engine(outdir="./sra-rag-data")
+    question = "What are the Lupus studies?"
 
     # -- Test query
     text = query_engine.query(question)

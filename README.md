@@ -1,9 +1,18 @@
 # RAG application for SRA data query
 
-## Summary
+## Data summary
 
-NCBI_SRA_Metadata_Full_20250818: 7,036,375 studies, ~500k study files 
-NCBI_SRA_Metadata_20250901: 10,596 studies, ~2k study files
+NCBI_SRA_Metadata_20250901: 10,596 studies
+NCBI_SRA_Metadata_Full_20250818: 7,036,375 studies
+
+For efficiency, we filter those studies:
+- Discard studies with only 1 sample
+- Discard studies with missing study or sample info
+- Discard non human or mouse studies
+
+After filtering, we have:
+NCBI_SRA_Metadata_20250901: 548 studies
+NCBI_SRA_Metadata_Full_20250818: 138,758 studies
 
 ## Data
 

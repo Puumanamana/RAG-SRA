@@ -1,14 +1,11 @@
 import ftplib
 from collections import Counter
 import tarfile
-import xml.etree.ElementTree as ET
-# from lxml import etree as ET
-
 from pathlib import Path
 from enum import Enum
 import io
 import json
-
+import xml.etree.ElementTree as ET
 
 
 class SRAFileType(Enum):
@@ -312,7 +309,7 @@ if __name__ == "__main__":
     parser = SRAFileParser(outdir="./sra-rag-data-full")
     parser.download_sra_from_ftp(dump_date="Full_20250818")
 
-    # Run
+    # Loop over studies and write to JSON
     count = 0
     with open(f"{parser.outdir}/sra-data.json", "w", encoding="utf-8") as f:
         f.write("[\n")

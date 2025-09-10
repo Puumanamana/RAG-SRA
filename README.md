@@ -2,8 +2,8 @@
 
 ## Data summary
 
-NCBI_SRA_Metadata_20250901: 10,596 studies
-NCBI_SRA_Metadata_Full_20250818: 7,036,375 studies
+- NCBI_SRA_Metadata_20250901: 10,596 studies
+- NCBI_SRA_Metadata_Full_20250818: 7,036,375 studies
 
 For efficiency, we filter those studies:
 - Discard studies with only 1 sample
@@ -11,8 +11,8 @@ For efficiency, we filter those studies:
 - Discard non human or mouse studies
 
 After filtering, we have:
-NCBI_SRA_Metadata_20250901: 548 studies
-NCBI_SRA_Metadata_Full_20250818: 138,758 studies
+- NCBI_SRA_Metadata_20250901: 548 studies
+- NCBI_SRA_Metadata_Full_20250818: 138,758 studies
 
 ## Data
 
